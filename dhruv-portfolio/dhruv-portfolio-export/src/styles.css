@@ -1,0 +1,192 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system: "Pit Lane Telemetry"
+ * Warm near-black graphite, bone type, signal-orange primary, acid-lime data accent.
+ * Display: Archivo (tight, heavy). Mono: JetBrains Mono for all measured values.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 10px);
+  --radius-3xl: calc(var(--radius) + 14px);
+  --radius-4xl: calc(var(--radius) + 18px);
+
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-signal: var(--signal);
+  --color-data: var(--data);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+
+  --shadow-plate: 0 1px 0 0 color-mix(in oklab, var(--foreground) 8%, transparent) inset,
+    0 24px 60px -30px rgb(0 0 0 / 0.9);
+}
+
+:root {
+  --radius: 0.25rem;
+  --background: oklch(0.145 0.008 60);
+  --foreground: oklch(0.955 0.008 90);
+  --surface: oklch(0.185 0.008 60);
+  --surface-2: oklch(0.225 0.009 60);
+  --card: oklch(0.185 0.008 60);
+  --card-foreground: oklch(0.955 0.008 90);
+  --popover: oklch(0.185 0.008 60);
+  --popover-foreground: oklch(0.955 0.008 90);
+  --primary: oklch(0.7 0.196 42);
+  --primary-foreground: oklch(0.16 0.02 42);
+  --secondary: oklch(0.225 0.009 60);
+  --secondary-foreground: oklch(0.955 0.008 90);
+  --muted: oklch(0.225 0.009 60);
+  --muted-foreground: oklch(0.68 0.012 80);
+  --accent: oklch(0.885 0.19 118);
+  --accent-foreground: oklch(0.18 0.05 118);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.97 0.01 90);
+  --border: oklch(0.3 0.01 60);
+  --input: oklch(0.3 0.01 60);
+  --ring: oklch(0.7 0.196 42);
+  --signal: oklch(0.7 0.196 42);
+  --data: oklch(0.885 0.19 118);
+}
+
+.dark {
+  --background: oklch(0.145 0.008 60);
+  --foreground: oklch(0.955 0.008 90);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--signal) 40%, transparent);
+  }
+}
+
+/* Fine measurement grid used behind hero and section bands */
+@utility grid-field {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility rule-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+@utility plate {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-plate);
+}
+
+@utility scanline {
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    height: 25%;
+    top: -25%;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in oklab, var(--signal) 16%, transparent),
+      transparent
+    );
+    animation: scan 5.5s linear infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes scan {
+  0% {
+    top: -25%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@utility ticker-track {
+  animation: ticker 38s linear infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility rise-in {
+  animation: rise 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
